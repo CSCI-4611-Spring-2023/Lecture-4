@@ -11,6 +11,8 @@ export class SpaceMinesweeper extends gfx.GfxApp
     // The graphics primitives that define objects in the scene
     private ship: gfx.Rectangle;
 
+    private mousePosition: gfx.Vector2;
+
     constructor()
     {
         // The first line of any child class constructor must call
@@ -18,6 +20,8 @@ export class SpaceMinesweeper extends gfx.GfxApp
         super();
 
         this.ship = new gfx.Rectangle();
+
+        this.mousePosition = new gfx.Vector2();
     }
 
     createScene(): void 
@@ -32,6 +36,12 @@ export class SpaceMinesweeper extends gfx.GfxApp
 
     update(deltaTime: number): void 
     {
-        
+        this.ship.lookAt(this.mousePosition);
+        this.ship.translateY(0.005);        
+    }
+
+    onMouseMove(event: MouseEvent): void
+    {
+        this.mousePosition.copy(this.getNormalizedDeviceCoordinates(event.x, event.y));
     }
 }
