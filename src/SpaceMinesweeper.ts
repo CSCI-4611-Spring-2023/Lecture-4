@@ -11,6 +11,7 @@ export class SpaceMinesweeper extends gfx.GfxApp
     // The graphics primitives that define objects in the scene
     private ship: gfx.Rectangle;
     private star: gfx.Rectangle;
+    private mine: gfx.Rectangle;
 
     // The stars will be drawn using a 2D particle system
     private starfield: gfx.Particles2;
@@ -25,6 +26,7 @@ export class SpaceMinesweeper extends gfx.GfxApp
 
         this.ship = new gfx.Rectangle();
         this.star = new gfx.Rectangle();
+        this.mine = new gfx.Rectangle();
 
         this.starfield = new gfx.Particles2(this.star, 200);
 
@@ -50,8 +52,14 @@ export class SpaceMinesweeper extends gfx.GfxApp
 
         this.starfield.update(true, true);
 
-        this.scene.add(this.ship);
+        this.mine.material.texture = new gfx.Texture('./mine.png');
+        this.mine.scale.set(0.12, 0.12);
+
         this.scene.add(this.starfield);
+        this.scene.add(this.mine);
+        this.scene.add(this.ship);
+        
+        
     }
 
     update(deltaTime: number): void 
@@ -66,7 +74,9 @@ export class SpaceMinesweeper extends gfx.GfxApp
         const shipSpeed = 0.8 * deltaTime;
         
         this.ship.lookAt(this.mousePosition);
-        this.ship.translateY(shipSpeed);        
+
+        if(this.ship.position.distanceTo(this.mousePosition) > 0.02)
+            this.ship.translateY(shipSpeed);        
     }
 
     onMouseMove(event: MouseEvent): void
