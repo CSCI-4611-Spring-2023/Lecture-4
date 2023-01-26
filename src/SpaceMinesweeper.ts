@@ -16,7 +16,11 @@ export class SpaceMinesweeper extends gfx.GfxApp
     // The stars will be drawn using a 2D particle system
     private starfield: gfx.Particles2;
 
+    private mines: gfx.Transform2;
+
     private mousePosition: gfx.Vector2;
+
+    private timeSinceLastMineSpawn: number;
 
     constructor()
     {
@@ -32,7 +36,11 @@ export class SpaceMinesweeper extends gfx.GfxApp
 
         this.mousePosition = new gfx.Vector2();
 
+        this.mines = new gfx.Transform2();
+
         this.renderer.viewport = gfx.Viewport.CROP;
+
+        this.timeSinceLastMineSpawn = 0;
     }
 
     createScene(): void 
@@ -56,10 +64,8 @@ export class SpaceMinesweeper extends gfx.GfxApp
         this.mine.scale.set(0.12, 0.12);
 
         this.scene.add(this.starfield);
-        this.scene.add(this.mine);
+        this.scene.add(this.mines);
         this.scene.add(this.ship);
-        
-        
     }
 
     update(deltaTime: number): void 
@@ -72,15 +78,30 @@ export class SpaceMinesweeper extends gfx.GfxApp
         // This is important to make sure that the game plays similarly
         // on different devices regardless of the framerate.
         const shipSpeed = 0.8 * deltaTime;
+        const mineSpawnInterval = 1;
         
         this.ship.lookAt(this.mousePosition);
 
         if(this.ship.position.distanceTo(this.mousePosition) > 0.02)
-            this.ship.translateY(shipSpeed);        
+        {
+            this.ship.translateY(shipSpeed);   
+        }
+            
+        this.timeSinceLastMineSpawn += deltaTime;
+        if(this.timeSinceLastMineSpawn > mineSpawnInterval)
+        {
+            this.spawnMine();
+            this.timeSinceLastMineSpawn = 0;
+        }
     }
 
     onMouseMove(event: MouseEvent): void
     {
         this.mousePosition.copy(this.getNormalizedDeviceCoordinates(event.x, event.y));
+    }
+
+    private spawnMine(): void
+    {
+        console.log('mine!');
     }
 }
