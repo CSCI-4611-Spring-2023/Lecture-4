@@ -56,8 +56,17 @@ export class SpaceMinesweeper extends gfx.GfxApp
 
     update(deltaTime: number): void 
     {
+        // These parameters define the motions of objects in the scene,
+        // which you will use to complete the code for this assignment.
+        // You can feel free to modify them if you want your game
+        // to have a different feel from the instructor's implementation.
+        // Note that all speed variables are scaled by deltaTime.
+        // This is important to make sure that the game plays similarly
+        // on different devices regardless of the framerate.
+        const shipSpeed = 0.8 * deltaTime;
+        
         this.ship.lookAt(this.mousePosition);
-        this.ship.translateY(0.005);        
+        this.ship.translateY(shipSpeed);        
     }
 
     onMouseMove(event: MouseEvent): void
